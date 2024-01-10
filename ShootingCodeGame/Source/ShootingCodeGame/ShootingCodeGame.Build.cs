@@ -11,5 +11,7 @@ public class ShootingCodeGame : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG", "ItemPlugin", "OnlineSubsystem", "OnlineSubsystemUtils" });
 
         DynamicallyLoadedModuleNames.Add("OnlineSubsystemNull");
+
+		PublicIncludePaths.AddRange(new string[] { "ShootingCodeGame" });
     }
 }
