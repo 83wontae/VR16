@@ -134,7 +134,7 @@ public:
 	void FindOnlineGames();
 
 	UFUNCTION(BlueprintCallable, Category = "Network|Test")
-	void JoinOnlineGame();
+	void JoinOnlineGame(FBlueprintSessionResult SessionResult);
 
 	UFUNCTION(BlueprintCallable, Category = "Network|Test")
 	void DestroySessionAndLeaveGame();

@@ -260,9 +260,20 @@ void UShootingGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSess
 
 			if (PlayerController && Sessions->GetResolvedConnectString(SessionName, TravelURL))
 			{
+				FString strIP, strPort;
+				int32 nPort = 7777;
+				//192.168.3.118:0
+				TravelURL.Split(TEXT(":"), &strIP, &strPort, ESearchCase::IgnoreCase, ESearchDir::FromStart);
+
+				//strIP = 192.168.3.118
+				//strPort = 0;
+				FString NewTravelURL = FString::Printf(TEXT("%s:%d"), *strIP, nPort);
+				//NewTravelURL = 192.168.3.118:7777
+
+				GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("OnJoinSessionComplete NewTravelURL=%s"), *NewTravelURL));
 				// Finally call the ClienTravel. If you want, you could print the TravelURL to see
 				// how it really looks like
-				PlayerController->ClientTravel(TravelURL, ETravelType::TRAVEL_Absolute);
+				PlayerController->ClientTravel(NewTravelURL, ETravelType::TRAVEL_Absolute);
 			}
 		}
 	}
@@ -347,7 +358,7 @@ void UShootingGameInstance::FindOnlineGames()
 	FindSessions(UniqueNetId, true, true);
 }
 
-void UShootingGameInstance::JoinOnlineGame()
+void UShootingGameInstance::JoinOnlineGame(FBlueprintSessionResult SessionResult)
 {
 	// Creating a local player where we can get the UserID from
 	ULocalPlayer* const Player = GetFirstGamePlayer();
@@ -367,27 +378,7 @@ void UShootingGameInstance::JoinOnlineGame()
 	if (false == UniqueNetId.IsValid())
 		return;
 
-	// Just a SearchResult where we can save the one we want to use, for the case we find more than one!
-	FOnlineSessionSearchResult SearchResult;
-
-	// If the Array is not empty, we can go through it
-	if (SessionSearch->SearchResults.Num() > 0)
-	{
-		for (int32 i = 0; i < SessionSearch->SearchResults.Num(); i++)
-		{
-			// To avoid something crazy, we filter sessions from ourself
-			if (SessionSearch->SearchResults[i].Session.OwningUserId != Player->GetPreferredUniqueNetId())
-			{
-				SearchResult = SessionSearch->SearchResults[i];
-
-				// Once we found sounce a Session that is not ours, just join it. Instead of using a for loop, you could
-				// use a widget where you click on and have a reference for the GameSession it represents which you can use
-				// here
-				JoinSession(UniqueNetId, GameSessionName, SearchResult);
-				break;
-			}
-		}
-	}
+	JoinSession(UniqueNetId, GameSessionName, SessionResult.OnlineResult);
 }
 
 void UShootingGameInstance::DestroySessionAndLeaveGame()
