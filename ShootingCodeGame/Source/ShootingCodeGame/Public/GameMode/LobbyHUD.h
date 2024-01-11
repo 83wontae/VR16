@@ -19,6 +19,14 @@ public:
 	virtual void BeginPlay();
 
 public:
+	void BindPlayerState(class ALobbyPlayerState* PlayerState);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void OnUpdateUserName(const FString& UserName);
+
+	void OnUpdateUserName_Implementation(const FString& UserName);
+
+public:
 	// TSubclassOf : 지정한 클래스와 클래스를 상속한 모든 클래스를 지정 가능
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<class UUserWidget> HudWidgetClass;
