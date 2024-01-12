@@ -8,6 +8,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDele_UpdateHp, float, CurHp, float, MaxHp);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDele_UpdateMag, int, Mag);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDele_UpdateUserIngame, const FString&, UserName);
 
 /**
  * 
@@ -19,6 +20,10 @@ class SHOOTINGCODEGAME_API AShootingPlayerState : public APlayerState
 
 public:
 	AShootingPlayerState();
+
+public:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 	
 public:
 	UFUNCTION()
@@ -53,4 +58,25 @@ public:
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 	FDele_UpdateMag m_Dele_UpdateMag;
+
+public:
+	void SetUserName(const FString& UserName);
+
+	void UpdateBind();
+
+public:
+	UFUNCTION()
+	void OnRep_UserName();
+
+	UFUNCTION(BlueprintPure)
+	FString GetStrUserName() { return m_UserName; };
+
+public:
+	UPROPERTY(ReplicatedUsing = OnRep_UserName)
+	FString m_UserName;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+	FDele_UpdateUserIngame m_Dele_UpdateUserName;
+
+	FTimerHandle th_UpdateBind;
 };

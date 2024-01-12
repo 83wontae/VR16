@@ -35,6 +35,16 @@ public:
 	void OnUpdateMyMag(int Mag);
 
 	void OnUpdateMyMag_Implementation(int Mag);
+
+public:
+	void BindPlayerState(class AShootingPlayerState* PlayerState);
+
+	void UpdateUserName();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void OnUpdateUserName(const FString& UserName);
+
+	void OnUpdateUserName_Implementation(const FString& UserName);
 	
 public:
 	// TSubclassOf : 지정한 클래스와 클래스를 상속한 모든 클래스를 지정 가능
@@ -45,4 +55,6 @@ public:
 	UUserWidget* HudWidget;
 
 	FTimerHandle th_BindMyPlayerState;
+
+	FTimerHandle th_BindPlayerState;
 };
