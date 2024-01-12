@@ -28,6 +28,9 @@ public:
 public:
 	UFUNCTION()
 	void OnRep_UserName();
+
+	UFUNCTION(BlueprintPure)
+	FString GetStrUserName() {	return m_UserName;	};
 	
 public:
 	UPROPERTY(ReplicatedUsing = OnRep_UserName)

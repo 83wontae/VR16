@@ -14,6 +14,9 @@ void ALobbyHUD::BeginPlay()
 	HudWidget = CreateWidget<UUserWidget>(GetWorld(), HudWidgetClass);
 	HudWidget->AddToViewport();
 
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue,
+		FString::Printf(TEXT("CreateWidget Sussesss!!!!!")));
+
 	APlayerController* pPlayer0 = GetWorld()->GetFirstPlayerController();
 	if (IsValid(pPlayer0) == false)
 		return;
@@ -27,8 +30,21 @@ void ALobbyHUD::BindPlayerState(ALobbyPlayerState* PlayerState)
 	if (IsValid(PlayerState))
 	{
 		PlayerState->m_Dele_UpdateUserName.AddDynamic(this, &ALobbyHUD::OnUpdateUserName);
-		OnUpdateUserName(PlayerState->m_UserName);
 	}
+
+	UpdateUserName();
+}
+
+void ALobbyHUD::UpdateUserName()
+{
+	if (HudWidget)
+	{
+		OnUpdateUserName("");
+		return;
+	}
+
+	FTimerManager& timerManger = GetWorld()->GetTimerManager();
+	timerManger.SetTimer(th_BindPlayerState, this, &ALobbyHUD::UpdateUserName, 0.01f, false);
 }
 
 void ALobbyHUD::OnUpdateUserName_Implementation(const FString& UserName)

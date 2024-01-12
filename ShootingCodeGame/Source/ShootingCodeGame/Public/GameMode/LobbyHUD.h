@@ -21,6 +21,8 @@ public:
 public:
 	void BindPlayerState(class ALobbyPlayerState* PlayerState);
 
+	void UpdateUserName();
+
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void OnUpdateUserName(const FString& UserName);
 
@@ -33,4 +35,6 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	UUserWidget* HudWidget;
+
+	FTimerHandle th_BindPlayerState;
 };
